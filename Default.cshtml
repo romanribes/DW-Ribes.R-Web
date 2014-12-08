@@ -3,44 +3,42 @@
 	Page.Title = "Página Principal";
 
     var db = Database.Open("TeleEncuestas");
-    var sqlSelect = @"SELECT * FROM Productos 
-                      INNER JOIN Settings ON Productos.ProductoID = Settings.ProductoDestacado";
+    var sqlSelect = @"SELECT * FROM Encuestas INNER JOIN Settings ON Encuestas.EncuestasId = Settings.EncuestaDestacado";
 
-    var producto = db.QuerySingle(sqlSelect);    
+    var Encuestas = db.QuerySingle(sqlSelect);    
 }
 
-@if(producto != null)
+@if(Encuestas != null)
 {
-    <h1 class="">Producto destacado</h1>
+    <h1 class="">Encuesta destacada</h1>
     <div id="productoDestacadoImagen">
-        <p>@Productos.ShowProductoImagen(producto.productoID.ToString())</p>
+        
     </div>
     <div id="productoDestacadoDetalles">
-        <a href="~/ProductoDetalles/@producto.productoID"><h2>@producto.titulo</h2></a>
-        <p>@producto.descripcion</p>
-        <p class="precio">@Formating.Price(producto.precio) €</p>
-        <p><a href="~/ProductoDetalles/@producto.productoID" class="detailsButton">Mas detalles</a></p>
+        <a href="~/EncuestaDetalles/@Encuestas.EncuestasID"><h2>@Encuestas.titulo</h2></a>
+        <p>@Encuestas.descripcion</p>
+        <p class="precio">@Encuestas.autor</p>
+        <p><a href="~/EncuestaDetalles/@Encuestas.EncuestasID" class="detailsButton">Mas detalles</a></p>
     </div> 
 }
 
 @{
-    sqlSelect = @"SELECT TOP 4 COUNT(productoID) AS productoCount, productoId
-                  FROM PedidoItems GROUP BY productoID
-                  ORDER BY productoCount DESC";
+    sqlSelect = @"SELECT TOP 4 EncuestasID FROM Encuestas 
+                  ORDER BY EncuestasId DESC";
 
-    var masPopulares = db.Query(sqlSelect);
+    var lastEncuestas = db.Query(sqlSelect);
 }
 
-@if(masPopulares.Count() > 0)
+@if(lastEncuestas.Count() > 0)
 {
     <div id="popularProductos">
-        <h1>Productos mas populares</h1>
+        <h1>Ultimas Encuestas</h1>
         <ul id="popularProductosList">
-            @foreach(var item in masPopulares)
+            @foreach(var item in lastEncuestas)
             {
                 <li>
-                    <a href="~/ProductoDetalles/@item.productoID" class="detailsButton">
-                        @Productos.ShowProductoThumbnail(item.productoID.ToString())
+                    <a href="~/EncuestaDetalles/@item.EncuestasId" class="detailsButton">
+                       
                     </a>
                 </li>   
             }

@@ -1,0 +1,51 @@
+﻿@{
+	Layout = "~/Shared/Layouts/_Layout.cshtml";
+
+	var nombreCategoria = UrlData[0];
+
+	if(nombreCategoria.IsEmpty())
+	{
+		Response.Redirect("~/Default");
+	}
+
+	Page.Title = nombreCategoria;
+
+	var db = Database.Open("TeleEncuestas");
+	var sqlSelect = "SELECT EncuestasId, titulo, autor FROM Encuestas " +
+					"LEFT OUTER JOIN Categorias ON Encuestas.categoria = Categorias.categoriaID " +
+					"WHERE Categorias.nombre = @0";
+
+	var encuestas = db.Query(sqlSelect, nombreCategoria);
+    
+}
+
+<div id="contentTitle">
+	<h1>@nombreCategoria</h1>
+</div>
+
+@if(encuestas.Count() == 0)
+{
+	<p>
+		No se han encontrado articulos en esta categoria.
+		Prueba a buscar una de las categorias de la lista de la izquierda.
+	</p>
+}
+else
+{
+	<ul id="productosList">
+		@foreach(var item in encuestas) {
+  			<li>
+				  <h3 style="height: 55px">
+					  <a href="~/EncuestaDetalles/@item.EncuestasId">@item.Titulo</a>
+				  </h3>	
+				  <div style="height: 130px">
+					 
+				  </div>			 
+				  <p class="autor">@item.autor</p>
+				  <p>
+					  <a href="~/EncuestaDetalles/@item.EncuestasId" class="detailsButton">Más Detalles</a>
+				  </p>
+			</li>
+		}
+	</ul>
+}

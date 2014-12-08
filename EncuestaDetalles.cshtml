@@ -1,0 +1,61 @@
+﻿@{
+	Layout = "~/Shared/Layouts/_Layout.cshtml";
+
+	var EncuestasID = !UrlData[0].IsEmpty() ? UrlData[0] : "0";
+
+	var db = Database.Open("TeleEncuestas");
+	var sqlSelect = "SELECT * FROM Encuestas WHERE encuestasId = @0";
+
+	var encuesta = db.QuerySingle(sqlSelect, EncuestasID);
+    
+}
+
+@if(encuesta == null)
+{
+	<p>
+		No ha sido posible recuperar los detalles del producto.
+		Intenta buscarlo en una de las categorias de la izquerda.
+	</p>	
+}
+else
+{
+	Page.Title = encuesta.Titulo;
+	<text>
+		<h1>@encuesta.Titulo</h1>
+		<div id="productoDetails">
+			<p class="precio">@encuesta.autor</p>
+			
+			<p>@encuesta.Descripcion</p>
+		</div>
+		<div id="pedidoForm">
+			<form action="~/Cart" method="post">
+				<fieldset>
+					<legend>Realizar Pedido</legend>
+					<p>
+						<label for="idioma">Manual: </label>
+						<select name="idioma">
+							<option value="ES">Castellano</option>
+							<option value="EN">Inglés</option>							
+							<option value="CA">Catalán</option>
+							<option value="EU">Euskera</option>
+							<option value="GA">Gallego</option>
+						</select>
+					</p>
+					<p>
+						@*@Html.Hidden("productoID", productoID)
+						@Html.Hidden("precio", producto.Precio) *@@* Ataque *@					
+						<input type="submit" value="Añadir al carrito" />
+					</p>
+				</fieldset>
+			</form>
+			<fieldset>
+				<legend>Compartir</legend>
+				<p>
+					@GooglePlusOne.PlusOneButton(language: GooglePlusOne.Languages.Spanish)
+				</p>
+				
+				
+			</fieldset>
+		</div>		
+	</text>
+}

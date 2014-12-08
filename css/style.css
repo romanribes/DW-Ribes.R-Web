@@ -357,3 +357,41 @@ text-align: center;
 #popularProductosList li a img {
 border: none;
 }
+/* Grid */
+
+.grid {
+	margin-top: 20px;
+	border-collapse: collapse;
+	width: 100%;
+}
+
+.grid td {
+	padding: 5px;
+}
+
+.gridHeader {
+	background-color: #fff;
+	font-weight: bold;
+	text-align: left;
+	border-bottom: 1px solid #cdcdcd;
+}
+
+.gridAlt {
+	background-color: #f7f7f7;
+}
+.gridFooter {
+	border-top: 1px solid #cdcdcd;
+}
+.grid tr .mainColumn {
+	width: 100%;
+}
+
+.grid .rightTextColumn
+{
+	text-align: right;
+}
+
+.grid .centerTextColumn
+{
+	text-align: center;
+}

@@ -11,12 +11,22 @@
 	Page.Title = nombreCategoria;
 
 	var db = Database.Open("TeleEncuestas");
-	var sqlSelect = "SELECT EncuestasId, titulo, autor FROM Encuestas " +
+	var sqlSelect = "SELECT EncuestasId, titulo, autor, Categorias.Nombre FROM Encuestas " +
 					"LEFT OUTER JOIN Categorias ON Encuestas.categoria = Categorias.categoriaID " +
 					"WHERE Categorias.nombre = @0";
 
 	var encuestas = db.Query(sqlSelect, nombreCategoria);
-    
+    @*
+    var db = Database.Open("TeleEncuestas");
+	var sqlCommand = @"SELECT Encuestas.EncuestasId, Encuestas.Titulo, Categorias.Nombre, Encuestas.autor
+					   FROM Encuestas INNER JOIN Categorias
+					   ON Encuestas.Categoria = Categorias.CategoriaId
+					   ORDER BY Titulo";
+	
+	var encuestas = db.Query(sqlCommand, nombreCategoria);
+    *@
+    var productosGrid = new WebGrid(source: encuestas,
+                                    rowsPerPage: 10);	
 }
 
 <div id="contentTitle">
@@ -32,7 +42,29 @@
 }
 else
 {
-	<ul id="productosList">
+    <div class="grid">
+    @productosGrid.GetHtml(
+        tableStyle: "grid",
+        headerStyle: "gridHeader",
+        alternatingRowStyle: "gridAlt",
+        footerStyle: "gridFooter",
+        columns: productosGrid.Columns(
+                productosGrid.Column(
+                    columnName: "EncuestasId",
+                    header: "ID"
+                    ),
+                productosGrid.Column("Titulo", "Titulo Producto"),
+                productosGrid.Column("Nombre", "Categoria"),
+                productosGrid.Column("autor","Autor"),
+                productosGrid.Column(null, null,
+                    format: @<text>
+                                <a href="~/EncuestaDetalles/@item.encuestasId">Detalles</a>
+                            </text>)                
+        ) 
+        
+    )
+</div>
+	@*<ul id="productosList">
 		@foreach(var item in encuestas) {
   			<li>
 				  <h3 style="height: 55px">
@@ -47,5 +79,5 @@ else
 				  </p>
 			</li>
 		}
-	</ul>
+	</ul>*@
 }

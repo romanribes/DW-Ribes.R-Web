@@ -1,0 +1,30 @@
+﻿@{
+	Layout = "~/Shared/Layouts/_AdminLayout.cshtml";
+	Page.Title = "Producto Destacado"; 
+	
+	var productoDestacado = "";
+
+    var db = Database.Open("MitjaMarkt");
+    
+    if(IsPost)
+    {
+        productoDestacado = Request["productoDestacado"];
+        var sqlUpdate = "UPDATE Settings SET productoDestacado = @0";
+        db.Execute(sqlUpdate, productoDestacado);
+
+        Response.Redirect("~/Admin/");
+    }
+
+    var sqlCommand = "SELECT productoDestacado FROM Settings";
+    productoDestacado = db.QuerySingle(sqlCommand).productoDestacado.ToString();
+}
+
+<h1>Producto destacado</h1>
+
+<form action="~/Admin/Productos/Destacado.cshtml" method="post">
+    <p>
+        @Html.Label("Producto destacado: ", "productoDestacado")
+        @Productos.ProductosDropDownList("productoDestacado", productoDestacado)
+        <input type="submit" value="Guardar" />
+    </p>
+</form>

@@ -1,0 +1,37 @@
+﻿@{
+    
+}
+
+<!DOCTYPE html>
+
+<html lang="es">
+    <head>
+        <meta charset="utf-8" />
+        <title>MitjaMarkt - @Page.Title</title>
+		<link href="@Href("~/css/style.css")" rel="stylesheet" />
+		<link href="@Href("~/css/AdminStyle.css")" rel="stylesheet" />
+
+		@RenderSection("head", required: false)
+    </head>
+    <body>
+		<div id="page">
+			<div id="header">
+				<p class="logo"><a href="@Href("~/")">MitjaMarkt</a></p>
+				<div id="headerRight">
+					<div id="accountSummary">@MembershipHelpers.AccountSummary()</div>
+				</div>
+			</div>
+			<div id="content">
+				<div id="adminMenu">
+					@RenderPage("~/Shared/Partials/_AdminMenu.cshtml")
+				</div>
+				<div id="main">
+					@RenderBody()
+				</div>
+			</div>
+			<div id="footer">
+				&copy;@DateTime.Now.Year MitjaMarkt. Todos los derechos reservados.
+			</div>
+		</div>        
+    </body>
+</html>

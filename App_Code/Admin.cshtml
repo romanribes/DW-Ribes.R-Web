@@ -1,0 +1,22 @@
+﻿@* Funciones de Administracion *@
+
+@functions {
+
+	public static bool CategoriaExiste(string categoriaTitulo)
+	{
+		var db = Database.Open("MitjaMARKT");
+		var sqlQuery = "SELECT categoriaId FROM Categorias WHERE nombre = @0";
+
+		return db.Query(sqlQuery, categoriaTitulo).Count() > 0;
+	}
+	
+	public static bool CategoriaEstaVacia(string categoriaId)	
+	{
+		var db = Database.Open("MitjaMARKT");
+		var sqlQuery = "SELECT ProductoId FROM Productos WHERE categoria = @0";
+
+		return db.Query(sqlQuery, categoriaId).Count() == 0;
+	}
+    
+}
+

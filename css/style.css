@@ -1,0 +1,359 @@
+*, html, body {
+	margin: 0px;
+	padding: 0px;
+}
+
+body {
+	background-color: #efefef;
+	color: #333;
+	font-family: Verdana, Helvetica, sans-serif;
+	font-size: .75em;
+}
+
+a:link {
+	color: #b80202;
+	text-decoration: none;
+}
+
+a:visited {
+	color: #b80202;
+	text-decoration: none;
+}
+
+a:hover {
+	color: #e00000;
+	text-decoration: none;
+}
+
+h1 {
+	margin-bottom: 10px;
+}
+
+input, select {
+	padding: 5px;
+}
+
+input[type="text"] 
+{
+	border: 1px solid #cdcdcd;
+}
+
+/* Layout */
+
+#page {
+	margin: 0 auto;
+	width: 960px;
+	background-color: #fff;
+}
+
+#header {
+	height: 60px;
+}
+
+#content, #footer {
+	border-top: 1px solid #cdcdcd;
+	clear: both;
+	margin: 0px 10px 0px 10px;
+	padding: 20px;
+}
+
+#footer {
+	color: #cdcdcd;
+	padding: 10px;
+	text-align: center;
+}
+
+.logo a {
+	float: left;
+	margin: 15px;
+	font-size: 3em;
+}
+
+/* Añadidos 2 elementos en el layout */
+
+#categorias {
+	float: left;
+	width: 165px;
+}
+
+#main {
+	float: right;
+	width: 705px;
+	margin-bottom: 20px;
+	border-left: 1px solid #cdcdcd;
+	padding-left: 20px;
+}
+
+/* Pagelet de categorias */
+
+#categorias ul {
+	border-bottom: 1px solid #cdcdcd;
+	margin-bottom: 20px;
+}
+
+#categorias ul li {
+	list-style: none;
+	border-top: 1px solid #cdcdcd;
+	margin: 0;
+	padding: 10px;
+}
+
+#categorias ul li:hover {
+	background-color: #fee;
+}
+
+/* Lista de productos */
+
+#main h1 {
+	border-bottom: 1px dashed #cdcdcd;
+}
+
+#productosList {
+	list-style: none;
+	margin: 0px;
+	padding: 0px;	
+}
+
+#productosList li {
+	float: left;
+	margin: 10px;
+	width: 215px;
+	height: 230px;	
+}
+
+#productosList h3 {
+	font-size: 1.05em;
+	font-weight: normal;
+	margin-bottom: 5px;
+	padding: 0px;
+}
+
+#productosList .precio {
+	font-size: 1.25em;
+	font-style: italic;
+	color: #633;
+}
+
+/* Detalles del producto */
+
+#productoDetails {
+	float: left;
+	width: 450px;
+}
+
+#productoDetails .precio {
+	font-size: 1.25em;
+	font-style: italic;
+	color: #633;
+	margin-bottom: 10px;
+}
+
+#pedidoForm {
+	float: left;
+}
+
+#pedidoForm fieldset {
+	width: 230px;
+	margin: 0px;
+	padding: 10px;
+}
+
+#pedidoForm legend {
+	font-weight: bold;
+	padding: 0px 10px 0px 10px;
+}
+
+#pedidoForm label {
+	font-weight: bold;
+	padding-right: 5px;
+}
+
+#pedidoForm p {
+	padding: 5px 0px 5px 0px;
+}
+
+#pedidoForm input[type="submit"] {
+	margin-top: 20px;
+	padding: 5px;
+	width: 100%;
+}
+
+/* Pagelet Form de busqueda */
+
+#headerRight {
+	float: right;
+	margin-right: 20px;
+}
+
+#search {
+	margin-top: 40px;
+	text-align: right;
+}
+
+/* Resultados de busqueda */
+
+#searchResult li {
+	margin-top: 10px;
+	font-size: 1.2em;
+	list-style: none;
+}
+
+/* Carrito */
+
+#cartTable {
+	width: 100%;
+	border: none;
+	border-spacing: 0px;
+}
+
+#cartTable th {
+	border-bottom: 1px solid #cdcdcd;
+}
+
+#cartTable td, th {
+	padding: 5px;
+}
+
+#cartTable .producto {
+	text-align: left;
+	width: 65%;
+}
+
+#cartTable .idioma {
+	text-align: center;
+	width: 10%;
+}
+
+#cartTable .precio {
+	text-align: right;
+	width: 20%;
+}
+
+#cartTable .cartTotal td {
+	margin-top: 10px;
+	border-top: 1px solid #cdcdcd;
+	text-align: right;
+	font-weight: bold;
+}
+
+div #cartButtons {
+	text-align: center;
+	margin: 40px 0px 20px 0px;
+}
+
+.linkButton {
+	border: 1px solid #cdcdcd;
+	background-color: #efefef;
+	margin: 0px;
+	padding: 10px;
+}
+
+.linkButton:hover {
+	background-color: #ddd;
+}
+
+/* Formularios cuentas usuarios */
+
+.accountForm label{
+	font-weight: bold;
+	padding-right: 5px;
+}
+
+.accountForm p {
+	padding: 5px 0px 5px 0px;
+}
+
+input[type=password] {
+	border: 1px solid #cdcdcd;
+}
+
+/* Validacion */
+
+.validation-summary-errors,
+	span.field-validation-error {
+	color: #FF0000;
+}
+
+input.input-validation-error {
+	border: 1px solid #FF0000;
+	background-color: #FFCCCC;
+}
+
+/* Account summary */
+
+#accountSummary {
+	float: right;
+	margin-top: 10px;
+	text-align: right;
+}
+
+/* Gravatar */
+
+#accountSummary img {
+	vertical-align: middle;
+}
+
+/* Checkout */
+
+#checkout h2 {
+	width: 30%;
+	border-bottom: 1px dashed #cdcdcd;
+	margin: 25px 0px 20px 0px;
+}
+
+#checkout label {
+	font-weight: bold;
+	padding-right: 5px;
+	width: 10em;
+	float: left;
+}
+
+#checkout p {
+	padding: 5px 0px 5px 0px;
+}
+
+#checkout input[type="submit"] {
+	padding: 5px 45px 5px 45px;
+}
+
+/* Pagina de inicio */
+
+#productoDestacadoImagen {
+    float: left;
+    width: 380px;
+}
+
+#productoDestacadoDetalles {
+    float: left;
+    width: 250px;
+}
+
+#productoDestacadoDetalles h3 {
+    margin-bottom: 20px;
+}
+
+#productoDestacadoDetalles .precio {
+    font-size: 1em;
+    font-style: italic;
+    color: #999;
+    margin: 10px 0px 10px 0px;
+}
+
+
+#popularProductos {
+clear:both;
+padding-top:25px;
+}
+#popularProductosList {
+list-style: none;
+margin: 0px;
+padding: 0px;
+}
+#popularProductosList li {
+float: left;
+margin: 12px 28px 12px 28px;
+text-align: center;
+}
+#popularProductosList li a img {
+border: none;
+}

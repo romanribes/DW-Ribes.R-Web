@@ -1,0 +1,11 @@
+﻿@{
+	var db = Database.Open("MitjaMARKT");
+	var sqlSelect = "SELECT * FROM Categorias";    
+}
+
+<ul>
+@foreach (var categoria in db.Query(sqlSelect))
+{
+	<li><a href="~/Productos/@categoria.Nombre">@categoria.Nombre</a></li>
+}
+</ul>

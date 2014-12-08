@@ -1,0 +1,20 @@
+﻿@functions {
+
+	public static string Price(decimal price)
+	{
+		int decimals = (price - Math.Truncate(price) > 0) ? 2 : 0;
+		return price.ToString("N" + decimals, 
+					new System.Globalization.CultureInfo("es-ES", false).NumberFormat
+					);
+					
+					
+				/*	new System.Globalization.NumberFormatInfo() {
+							NumberDecimalSeparator = ",",
+							NumberGroupSeparator = "."} */
+							
+
+	}
+    
+}
+
+

@@ -1,0 +1,39 @@
+﻿@{
+    Layout = "~/Shared/Layouts/_AdminLayout.cshtml";
+	Page.Title = "Productos"; 
+	
+	var db = Database.Open("MitjaMarkt");
+	var sqlCommand = @"SELECT Productos.ProductoId, Productos.Titulo, Categorias.Nombre
+					   FROM Productos INNER JOIN Categorias
+					   ON Productos.Categoria = Categorias.CategoriaId
+					   ORDER BY Titulo";
+	
+	var result = db.Query(sqlCommand);
+
+    var productosGrid = new WebGrid(source: result,
+                                    rowsPerPage: 10);				      
+}
+
+<h1>Listado Productos</h1>
+<a href="ProductoDetails">Añadir nuevo producto</a>
+<div class="grid">
+    @productosGrid.GetHtml(
+        tableStyle: "grid",
+        headerStyle: "gridHeader",
+        alternatingRowStyle: "gridAlt",
+        footerStyle: "gridFooter",
+        columns: productosGrid.Columns(
+                productosGrid.Column(
+                    columnName: "ProductoId",
+                    header: "ID"
+                    ),
+                productosGrid.Column("Titulo", "Titulo Producto"),
+                productosGrid.Column("Nombre", "Categoria"),
+                productosGrid.Column(null, null,
+                    format: @<text>
+                                <a href="ProductoDetails/@item.ProductoId">Detalles</a>
+                            </text>)                
+        ) 
+        
+    )
+</div>

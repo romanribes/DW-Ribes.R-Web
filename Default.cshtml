@@ -1,17 +1,49 @@
 ﻿@{
-    
+	Layout = "~/Shared/Layouts/_Layout.cshtml";
+	Page.Title = "Página Principal";
+
+    var db = Database.Open("TeleEncuestas");
+    var sqlSelect = @"SELECT * FROM Productos 
+                      INNER JOIN Settings ON Productos.ProductoID = Settings.ProductoDestacado";
+
+    var producto = db.QuerySingle(sqlSelect);    
 }
 
-<!DOCTYPE html>
+@if(producto != null)
+{
+    <h1 class="">Producto destacado</h1>
+    <div id="productoDestacadoImagen">
+        <p>@Productos.ShowProductoImagen(producto.productoID.ToString())</p>
+    </div>
+    <div id="productoDestacadoDetalles">
+        <a href="~/ProductoDetalles/@producto.productoID"><h2>@producto.titulo</h2></a>
+        <p>@producto.descripcion</p>
+        <p class="precio">@Formating.Price(producto.precio) €</p>
+        <p><a href="~/ProductoDetalles/@producto.productoID" class="detailsButton">Mas detalles</a></p>
+    </div> 
+}
 
-<html lang="es">
-    <head>
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
-        <meta charset="utf-8" />
-        <title>Título de mi sitio</title>
-        <link href="~/favicon.ico" rel="shortcut icon" type="image/x-icon" />
-    </head>
-    <body>
-        
-    </body>
-</html>
+@{
+    sqlSelect = @"SELECT TOP 4 COUNT(productoID) AS productoCount, productoId
+                  FROM PedidoItems GROUP BY productoID
+                  ORDER BY productoCount DESC";
+
+    var masPopulares = db.Query(sqlSelect);
+}
+
+@if(masPopulares.Count() > 0)
+{
+    <div id="popularProductos">
+        <h1>Productos mas populares</h1>
+        <ul id="popularProductosList">
+            @foreach(var item in masPopulares)
+            {
+                <li>
+                    <a href="~/ProductoDetalles/@item.productoID" class="detailsButton">
+                        @Productos.ShowProductoThumbnail(item.productoID.ToString())
+                    </a>
+                </li>   
+            }
+        </ul>
+    </div>
+}

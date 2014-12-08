@@ -1,0 +1,127 @@
+﻿@{
+    Layout = "~/Shared/Layouts/_AdminLayout.cshtml";
+	Page.Title = "Productos";
+	
+	var productoId = "new";
+	var titulo = "";
+	var precio = "";
+	var descripcion = "";
+	var keywords = "";
+	var categoria = "";
+	
+	var db = Database.Open("MitjaMarkt");
+
+	if(!UrlData[0].IsEmpty())
+	{
+		productoId = UrlData[0];
+
+		var sqlCommand = "SELECT * FROM Productos WHERE productoId = @0";
+		var producto = db.QuerySingle(sqlCommand, productoId);
+
+		titulo = producto.Titulo;
+		precio = producto.Precio.ToString();
+		descripcion = producto.Descripcion;
+		keywords = producto.Keywords;
+		categoria = producto.Categoria.ToString();
+	}
+
+	if(IsPost)
+	{
+		productoId = Request["productoId"];
+		titulo = Request["titulo"];
+		precio = Request["precio"];
+		descripcion = Request["descripcion"];
+		keywords = Request["keywords"];
+		categoria = Request["categoria"];
+
+		//Validacion
+		Validation.RequireField("titulo", "El titulo del producto no puede estar en blanco");
+		Validation.RequireField("precio", "El precio es obligatorio");
+		Validation.RequireField("descripcion", "La descripcion no puede quedar vacia.");
+
+		if(Validation.IsValid())
+		{
+			var sql = "";
+			if(productoId == "new")
+			{
+				//Insertar nuevo registro producto
+				sql = @"INSERT INTO Productos (titulo, precio, descripcion, keywords, categoria)
+						VALUES (@0, @1, @2, @3, @4)";				
+			}
+			else
+			{
+				//Actualizar el registro de producto existente
+				sql = @"UPDATE Productos 
+						SET titulo = @0, precio = @1, descripcion = @2, keywords = @3, categoria = @4
+						WHERE productoId = @5";
+			}
+			
+			db.Execute(sql, titulo, precio, descripcion, keywords, categoria, productoId);
+
+			if(productoId =="new") {
+				productoId = db.GetLastInsertId().ToString();
+			}
+			
+			//Imagen del producto
+            var productoImagen = WebImage.GetImageFromRequest();
+            if(productoImagen != null)
+            {
+                var savePath = @"~\Images\Productos\" + productoId;
+                productoImagen.Save(filePath: savePath + ".png",
+                                    imageFormat: "png",
+                                    forceCorrectExtension: true);
+                
+                //Redimensionar y guardar una miniatura
+                productoImagen.Resize(height: 121, width: 121, preserveAspectRatio: true, preventEnlarge: true);
+                productoImagen.Crop(1, 1);                
+
+                productoImagen.Save(filePath: savePath + "_thumb.png",
+                                    imageFormat: "png",
+                                    forceCorrectExtension: true); 
+            }			
+
+			Response.Redirect("~/Admin/Productos/"); //Importante la barra final en la URL
+		}
+	}
+
+}
+
+<h1>Detalles del producto</h1>
+
+<div id="productoForm">
+	<form action="" method="post" enctype="multipart/form-data">
+		@Html.Hidden("productoId", productoId)
+		<p>
+			@Html.Label("Titulo: ", "titulo")<br />
+			@Html.TextBox("titulo", titulo)
+			@Html.ValidationMessage("titulo")
+		</p>
+		<p>
+			@Html.Label("Precio: ", "precio")<br />
+			@Html.TextBox("precio", precio)
+			@Html.ValidationMessage("precio")
+		</p>
+		<p>
+			@Html.Label("Descripcion: ", "descripcion")<br />
+			@Html.TextArea("descripcion", descripcion, 10, 40, null)
+			@Html.ValidationMessage("descripcion")
+		</p>
+		<p>
+			@Html.Label("Palabras clave: ", "keywords")<br />
+			@Html.TextBox("keywords", keywords)
+		</p>
+		<p>
+			@Html.Label("Categoria: ", "categoria")<br />
+			@Productos.CategoriasDropDownList("categoria", categoria)
+		</p>
+		<p>
+			@Html.Label("Imagen: ", "productoImagen")<br />
+			<input type="file" name="productoImagen" />
+		</p>
+		<p>
+			@{ var btnSubmitText = productoId == "new" ? "Insertar" : "Actualizar"; }
+			<input type="submit" value="@(productoId == "new" ? "Insertar" : "Actualizar")" />
+		</p>
+	</form>
+</div>
+<div id="productoFormImagen">@Productos.ShowProductoImagen(productoId)</div>

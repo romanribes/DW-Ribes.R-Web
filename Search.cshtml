@@ -2,14 +2,14 @@
 	Layout = "~/Shared/Layouts/_Layout.cshtml";
 	Page.Title = "Búsqueda en el Catálogo";
 
-	var db = Database.Open("TeleEncuestas");
+	var db = Database.Open("ChistesMalos");
 
 	var searchWords = Request["searchTerm"].Split(' ');
 
 	IEnumerable<dynamic> result = Enumerable.Empty<string>();
 
-	var sqlSelect = "SELECT EncuestasId, titulo FROM Encuestas WHERE " +
-					"titulo LIKE @0 OR descripcion LIKE @0 OR autor LIKE @0";
+	var sqlSelect = "SELECT chisteId, chiste FROM chistes WHERE " +
+					"chiste LIKE @0 OR autor LIKE @0";
 
 	foreach(var word in searchWords)
 	{
@@ -26,7 +26,7 @@
 	@foreach(var item in result)
 	{
 		<li>
-			<a href="~/EncuestaDetalles/@item.EncuestasId">@item.Titulo</a>
+			<a href="~/ChisteDetalles/@item.chisteId">@item.chiste</a>
 		</li>
 	}
 </ul>

@@ -3,14 +3,14 @@
 
 	var EncuestasID = !UrlData[0].IsEmpty() ? UrlData[0] : "0";
 
-	var db = Database.Open("TeleEncuestas");
-	var sqlSelect = "SELECT * FROM Encuestas WHERE encuestasId = @0";
+	var db = Database.Open("ChistesMalos");
+	var sqlSelect = "SELECT * FROM chistes WHERE chisteId = @0";
 
-	var encuesta = db.QuerySingle(sqlSelect, EncuestasID);
+	var chiste = db.QuerySingle(sqlSelect, EncuestasID);
     
 }
 
-@if(encuesta == null)
+@if(chiste == null)
 {
 	<p>
 		No ha sido posible recuperar los detalles del producto.
@@ -19,13 +19,13 @@
 }
 else
 {
-	Page.Title = encuesta.Titulo;
+	Page.Title = chiste.categoria;
 	<text>
-		<h1>@encuesta.Titulo</h1>
+		@*<h1>@chiste.Titulo</h1>*@
 		<div id="productoDetails">
-			<p class="precio">@encuesta.autor</p>
+			<p class="precio">@chiste.autor</p>
 			
-			<p>@encuesta.Descripcion</p>
+			<p>@chiste.chiste</p>
 		</div>
 		<div id="pedidoForm">
 			<form action="~/Cart" method="post">

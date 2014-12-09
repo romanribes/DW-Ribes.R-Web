@@ -2,42 +2,41 @@
 	Layout = "~/Shared/Layouts/_Layout.cshtml";
 	Page.Title = "Página Principal";
 
-    var db = Database.Open("TeleEncuestas");
-    var sqlSelect = @"SELECT * FROM Encuestas INNER JOIN Settings ON Encuestas.EncuestasId = Settings.EncuestaDestacado";
+    var db = Database.Open("ChistesMalos");
+    var sqlSelect = @"SELECT * FROM chistes INNER JOIN Settings ON chistes.chisteId = Settings.chistesDestacado";
 
-    var Encuestas = db.QuerySingle(sqlSelect);    
+    var chiste = db.QuerySingle(sqlSelect);    
 }
 
-@if(Encuestas != null)
+@if(chiste != null)
 {
-    <h1 class="">Encuesta destacada</h1>
+    <h1 class="">Chiste del mes</h1>
     <div id="productoDestacadoImagen">
         
     </div>
     <div id="productoDestacadoDetalles">
-        <a href="~/EncuestaDetalles/@Encuestas.EncuestasID"><h2>@Encuestas.titulo</h2></a>
-        <p>@Encuestas.descripcion</p>
-        <p class="precio">@Encuestas.autor</p>
-        <p><a href="~/EncuestaDetalles/@Encuestas.EncuestasID" class="detailsButton">Mas detalles</a></p>
+        <p>@chiste.chiste</p>
+        <p class="precio">@chiste.autor</p>
+        <p><a href="~/ChisteDetalles/@chiste.chisteID" class="detailsButton">Mas detalles</a></p>
     </div> 
 }
 
 @{
-    sqlSelect = @"SELECT TOP 4 EncuestasID FROM Encuestas 
-                  ORDER BY EncuestasId DESC";
+    sqlSelect = @"SELECT TOP 4 chisteID,chiste FROM chistes 
+                  ORDER BY chisteId DESC";
 
-    var lastEncuestas = db.Query(sqlSelect);
+    var lastchistes = db.Query(sqlSelect);
 }
 
-@if(lastEncuestas.Count() > 0)
+@if(lastchistes.Count() > 0)
 {
     <div id="popularProductos">
-        <h1>Ultimas Encuestas</h1>
+        <h1>Ultimos Chistes</h1>
         <ul id="popularProductosList">
-            @foreach(var item in lastEncuestas)
+            @foreach(var item in lastchistes)
             {
                 <li>
-                    <a href="~/EncuestaDetalles/@item.EncuestasId" class="detailsButton">
+                    <a href="~/ChisteDetalles/@item.chisteId" class="detailsButton">@item.chiste
                        
                     </a>
                 </li>   

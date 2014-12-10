@@ -1,0 +1,43 @@
+﻿@{
+    Layout = "~/Shared/Layouts/_AdminLayout.cshtml";
+	Page.Title = "Chistes"; 
+	
+	var db = Database.Open("ChistesMalos");
+	var sqlCommand = @"SELECT chistes.chisteId, chistes.Titulo, Categorias.Nombre
+					   FROM chistes INNER JOIN Categorias
+					   ON chistes.Categoria = Categorias.CategoriaId
+					   ORDER BY Titulo";
+	
+	var result = db.Query(sqlCommand);
+
+    var chistesGrid = new WebGrid(source: result,
+                                    rowsPerPage: 10);				      
+}
+
+<h1>Listado Chistes</h1>
+<a href="ChisteDetails">Añadir nuevo Chiste</a>
+<div class="grid">
+    @chistesGrid.GetHtml(
+        tableStyle: "grid",
+        headerStyle: "gridHeader",
+        alternatingRowStyle: "gridAlt",
+        footerStyle: "gridFooter",
+        columns: chistesGrid.Columns(
+                chistesGrid.Column(
+                    columnName: "chisteId",
+                    header: "ID"
+                    ),
+                chistesGrid.Column("Titulo", "Titulo Producto"),
+                chistesGrid.Column("Nombre", "Categoria"),
+                chistesGrid.Column(null, null,
+                    format: @<text>
+                                <a href="ChisteDetails/@item.chisteId">Detalles</a>
+                            </text>),
+                chistesGrid.Column(null, null,
+                    format: @<text>
+                                <a href="DeleteChiste/@item.chisteId">Eliminar</a>
+                            </text>)                
+        ) 
+        
+    )
+</div>

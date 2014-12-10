@@ -8,7 +8,7 @@
 
 	IEnumerable<dynamic> result = Enumerable.Empty<string>();
 
-	var sqlSelect = "SELECT chisteId, chiste FROM chistes WHERE " +
+	var sqlSelect = "SELECT chisteId, chiste, titulo FROM chistes WHERE " +
 					"chiste LIKE @0 OR autor LIKE @0";
 
 	foreach(var word in searchWords)
@@ -26,7 +26,8 @@
 	@foreach(var item in result)
 	{
 		<li>
-			<a href="~/ChisteDetalles/@item.chisteId">@item.chiste</a>
+            <a href="~/ChisteDetalles/@item.chisteId">@item.Titulo</a>
+			<p>@item.chiste</p>
 		</li>
 	}
 </ul>

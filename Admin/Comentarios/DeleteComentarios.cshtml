@@ -1,0 +1,39 @@
+﻿@{
+    Layout = "~/Shared/Layouts/_AdminLayout.cshtml";
+	Page.Title = "Eliminar Chiste";  	
+
+	var chisteId = UrlData[0];
+	if(chisteId.IsEmpty()) {
+		Response.Redirect("~/Admin/Chistes/");
+	}
+
+	var db = Database.Open("ChistesMalos");
+
+	if(IsPost)
+	{
+		var sqlDelete = "DELETE FROM chistes WHERE chisteId = @0";
+		db.Execute(sqlDelete, chisteId);
+		Response.Redirect("~/Admin/Chistes/");
+	}
+
+	var sqlSelect = "SELECT * FROM chistes WHERE chisteId = @0";
+	var chiste = db.QuerySingle(sqlSelect, chisteId);    
+}
+
+@if(!Admin.ChisteSinComentarios(chisteId))
+{
+	<p>No es posible eliminar el "@chiste.titulo" mientras tenga comentarios asociados.</p>
+}
+else
+{
+	<p>Estas seguro de que quieres eliminar el chiste: @chiste.titulo?</p>
+	
+	<form action="" method="post" id="deleteForm">
+		<input type="button" 
+			onclick="window.location = '@Href("~/Admin/Chistes/")';"
+			value="Cancelar" />
+		<input type="submit" value="Eliminar" />			   
+	</form>	
+}
+
+

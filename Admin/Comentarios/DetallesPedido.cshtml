@@ -1,0 +1,85 @@
+﻿@{
+	Layout = "~/Shared/Layouts/_AdminLayout.cshtml";
+	Page.Title = "Detalles Pedido";
+
+	//Obtener el ID del pedido desde la informacion de la URL
+	var pedidoId = !UrlData[0].IsEmpty() ? UrlData[0] : "0";
+
+	var db = Database.Open("MitjaMarkt");
+
+	if(IsPost)
+	{
+		pedidoId = Request["pedidoId"];
+		var enviado = Request["enviado"].AsBool();
+
+		var sqlUpdate = @"UPDATE Pedidos
+						  SET PedidoEnviado = @0
+						  WHERE PedidoId = @1";
+
+		db.Execute(sqlUpdate, enviado, pedidoId);
+
+		Response.Redirect("~/Admin/Pedidos/");
+	}
+
+	var sqlCommand = @"SELECT Pedidos.*, UserProfile.Email
+					   FROM Pedidos INNER JOIN UserProfile
+					   ON Pedidos.UserId = UserProfile.UserId
+					   WHERE PedidoId = @0";
+
+	var pedido = db.QuerySingle(sqlCommand, pedidoId);
+
+	//Obtener los items
+	var itemsSql = "SELECT * FROM PedidoItems WHERE PedidoId = @0";
+	var pedidoItems = db.Query(itemsSql, pedidoId);
+    
+}
+
+@if(pedido == null)
+{
+	<p>No ha sido posible recuperar los datos de este pedido</p>
+}
+else
+{
+	<h1>Detalles del pedido</h1>
+	<p><strong>ID: </strong>@pedido.PedidoId</p>
+	<p><strong>Usuario: </strong> <a href="mailto:@pedido.Email">@pedido.Email</a></p>
+	<p><strong>Realizado: </strong>@pedido.Fecha</p>
+
+	<h2>Detalles de envio</h2>
+	<p><strong>Direccion 1: </strong>@pedido.Direccion1</p>
+	<p><strong>Direccion 2: </strong>@pedido.Direccion2</p>
+	<p><strong>Poblacion: </strong>@pedido.Poblacion</p>
+	<p><strong>Provincia: </strong>@pedido.Provincia</p>
+	<p><strong>Codigo Postal: </strong>@pedido.CodigoPostal</p>
+	<p><strong>Pais: </strong>@pedido.Pais</p>
+
+	<form action="DetallesPedido" method="post" id="enviadoForm">
+		@Html.Hidden("pedidoId", pedido.PedidoId)
+		Pedido enviado
+		@Html.CheckBox("enviado", pedido.PedidoEnviado, new { value = "true"})
+		<input type="submit" value="Actualizar" />
+	</form>
+
+	<h2>Items del pedido</h2>
+	<table id="cartTable">
+		<tr>
+			<th class="producto">Producto</th>
+			<th class="idioma">Idioma</th>
+			<th class="precio">Precio</th>
+		</tr>
+
+		@foreach(var item in pedidoItems)
+		{
+			<tr>
+				<td class="producto">@Productos.GetNombreProductoFromId(item.ProductoId)</td>
+				<td class="idioma">@item.Idioma</td>
+				<td class="precio">@Formating.Price(item.Precio)</td>
+			</tr>  	
+		}
+
+		<tr class="cartTotal">
+			<td colspan="2">&nbsp;</td>
+			<td>Total: @pedido.Total.ToString("N2") €</td>
+		</tr>
+	</table>		
+}

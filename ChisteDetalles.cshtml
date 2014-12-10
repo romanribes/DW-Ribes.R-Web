@@ -1,15 +1,39 @@
 ﻿@{
 	Layout = "~/Shared/Layouts/_Layout.cshtml";
 
-	var EncuestasID = !UrlData[0].IsEmpty() ? UrlData[0] : "0";
+	var chisteID = !UrlData[0].IsEmpty() ? UrlData[0] : "0";
 
 	var db = Database.Open("ChistesMalos");
 	var sqlSelect = "SELECT * FROM chistes WHERE chisteId = @0";
 
-	var chiste = db.QuerySingle(sqlSelect, EncuestasID);
-    
-}
+	var chiste = db.QuerySingle(sqlSelect, chisteID);
+    /*comentarios*/
+    var sqlSelect2 = "SELECT * FROM comentarios WHERE chisteId = @0 order by comentariid desc";
+    var comentarios = db.Query(sqlSelect2,chisteID);
 
+    var comentario="";
+    var autor="anonimo";
+
+    if(IsPost)
+	{
+		autor = Request["autor"];
+		comentario = Request["comentario"];
+		//Validacion
+		Validation.RequireField("comentario", "El comentario del chiste no puede estar en blanco");
+		Validation.RequireField("autor", "El autor es obligatorio");
+
+		if(Validation.IsValid())
+		{
+			var sql = "";
+			//Insertar nuevo comentario
+				sql = @"INSERT INTO comentarios (autor, comentari,data, chisteID )
+						VALUES (@0, @1, @2, @3)";	   
+		db.Execute(sql, autor, comentario, DateTime.Now, chisteID);
+        Response.Redirect("~/ChisteDetalles/");
+		//comentarioId = db.GetLastInsertId().ToString();
+        }
+    }
+}
 @if(chiste == null)
 {
 	<p>
@@ -21,41 +45,52 @@ else
 {
 	Page.Title = chiste.categoria;
 	<text>
-		@*<h1>@chiste.Titulo</h1>*@
+		<h1>@chiste.Titulo</h1>
 		<div id="productoDetails">
 			<p class="precio">@chiste.autor</p>
-			
 			<p>@chiste.chiste</p>
 		</div>
 		<div id="pedidoForm">
-			<form action="~/Cart" method="post">
-				<fieldset>
-					<legend>Realizar Pedido</legend>
-					<p>
-						<label for="idioma">Manual: </label>
-						<select name="idioma">
-							<option value="ES">Castellano</option>
-							<option value="EN">Inglés</option>							
-							<option value="CA">Catalán</option>
-							<option value="EU">Euskera</option>
-							<option value="GA">Gallego</option>
-						</select>
-					</p>
-					<p>
-						@*@Html.Hidden("productoID", productoID)
-						@Html.Hidden("precio", producto.Precio) *@@* Ataque *@					
-						<input type="submit" value="Añadir al carrito" />
-					</p>
-				</fieldset>
-			</form>
 			<fieldset>
 				<legend>Compartir</legend>
 				<p>
 					@GooglePlusOne.PlusOneButton(language: GooglePlusOne.Languages.Spanish)
 				</p>
-				
-				
 			</fieldset>
-		</div>		
+		</div>
+        <div id="comentariosForm">
+            <fieldset>
+					<legend>Comentarios</legend>
+                    <form action="" method="post" enctype="multipart/form-data">
+                        <p>
+			                @Html.Label("Comentario: ", "comentario")<br />
+			                @Html.TextArea("comentario", comentario, 5, 90, null)
+			                @Html.ValidationMessage("comentario")
+		                </p>
+                        <p>
+			                @Html.Label("autor: ", "autor")<br />
+			                @Html.TextBox("autor", autor)
+			                @Html.ValidationMessage("autor")
+                            <input type="submit" value="Enviar" />
+                            
+		                </p>
+				    </form>
+                       @if(comentarios.Count()==0){
+                           <br/><p>No existen comentarios para este chiste. Animate a ser el primero!</p>
+                       }else{
+                         <table class="grid">
+	                        @foreach(var comentari in comentarios)
+	                        {
+		                        <tr>
+                                    <th>@comentari.autor dice: </th><td> @comentari.data</td>
+                                </tr>
+                                <tr>
+			                        <td colspan="2">@comentari.comentari"</td>
+			                    </tr>
+	                        }
+                        </table>  
+                       }			
+				</fieldset>		
+        </div>
 	</text>
 }

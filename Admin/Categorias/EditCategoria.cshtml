@@ -1,0 +1,48 @@
+﻿@{
+    Layout = "~/Shared/Layouts/_AdminLayout.cshtml";
+	Page.Title = "Editar Categoria";
+	
+	var categoriaId = !UrlData[0].IsEmpty() ? UrlData[0] : "0";
+	var categoriaTitulo = "";
+
+	var db = Database.Open("ChistesMalos");
+
+	if(IsPost)
+	{
+		categoriaId = Request["categoriaId"];
+		categoriaTitulo = Request["categoriaTitulo"];
+
+		Validation.RequireField("categoriaTitulo", "El titulo no puede esta en blanco.");
+		
+		if(Validation.IsValid())
+		{
+			if(Admin.CategoriaExiste(categoriaTitulo)) {
+				ModelState.AddError("categoriaTitulo","La categoria ya existe.");				
+			}
+
+			if(ModelState.IsValid)			
+			{
+				var sqlUpdate = "UPDATE Categorias SET Nombre = @0 WHERE CategoriaId = @1";
+				db.Execute(sqlUpdate, categoriaTitulo, categoriaId);
+
+				Response.Redirect("~/Admin/Categorias/");
+			}
+		}
+	}
+	else
+	{
+		var sqlCommand = "SELECT * FROM Categorias WHERE CategoriaId = @0";
+		categoriaTitulo = db.QuerySingle(sqlCommand, categoriaId).Nombre;
+	}	      
+}
+
+<h1>Editar Categoria</h1>
+<form action="" method="post">
+	<p>
+		Titulo de la categoria:
+		@Html.Hidden("categoriaId", categoriaId)
+		@Html.TextBox("categoriaTitulo", categoriaTitulo)
+		<input type="submit" value="Actualizar" />
+		@Html.ValidationMessage("categoriaTitulo")
+	</p>
+</form>

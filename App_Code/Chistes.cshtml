@@ -1,0 +1,74 @@
+﻿@* Funciones Productos *@
+@*
+@functions {
+	
+	public static string GetNombreProductoFromId(int productoID)
+	{
+		var db = Database.Open("MitjaMARKT");
+		var sqlQuery = "SELECT Titulo FROM Productos WHERE productoID = @0";
+		return db.QuerySingle(sqlQuery, productoID).Titulo;
+	}    
+}
+*@
+@helper ChistesDropDownList(string nombre, string selectedValue)
+{
+    var optionList = new List<SelectListItem>();
+    var db = Database.Open("ChistesMalos");
+
+    var sqlCommand = "SELECT chisteid, titulo FROM chistes ORDER BY titulo";
+    var result = db.Query(sqlCommand);
+  
+    optionList.Add(new SelectListItem { Value = "0", Text = "No selecionado..." });
+
+    foreach (var item in result)
+    {
+        optionList.Add(new SelectListItem { Value = item.chisteId.ToString(), Text = item.titulo });
+    }
+
+    @Html.DropDownList(nombre, null, optionList, selectedValue, null)
+}
+
+@helper CategoriasDropDownList(string nombre, string selectedValue)
+{
+	var optionList = new List<SelectListItem>();
+	var db = Database.Open("ChistesMalos");
+
+	var sqlCommand = @"SELECT CategoriaId, Nombre
+					FROM Categorias
+					ORDER BY Nombre";
+
+	var result = db.Query(sqlCommand);
+
+	foreach(var item in result)
+	{
+		optionList.Add(new SelectListItem { Value = item.categoriaId.ToString(),
+											Text = item.nombre });		
+	}
+	
+	@Html.DropDownList(nombre, null, optionList, selectedValue, null);
+
+}
+
+@helper ShowProductoImagen(string productoId)
+{
+   var imagePath = @"~/Images/Productos/" + productoId + ".png";
+   
+   if(!File.Exists(Server.MapPath(imagePath)))
+   {
+       imagePath = "~/Images/Productos/no_disponible.png";
+   }
+   
+   <img src="@Href(imagePath)" width="330" alt="Imagen Producto" />
+}
+
+@helper ShowProductoThumbnail(string productoId)
+{
+    var imagePath = @"~/Images/Productos/" + productoId + "_thumb.png";
+
+    if (!File.Exists(Server.MapPath(imagePath)))
+    {
+        imagePath = "~/Images/Productos/no_disponible_thumb.png";
+    }
+
+    <img src="@Href(imagePath)" style="height: fill-available" alt="Imagen Producto" />
+}

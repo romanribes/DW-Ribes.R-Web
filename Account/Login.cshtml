@@ -1,0 +1,61 @@
+﻿@{
+	Layout = "~/Shared/Layouts/_Layout.cshtml";
+	Page.Title = "Iniciar sesion";
+
+	var email = "";
+	var password = "";	
+
+	if(IsPost)
+	{
+		email = Request["email"];
+		password = Request["password"];
+		var rememberMe = Request["rememberMe"].AsBool();
+
+		Validation.RequireField("email", "El nombre de usuario no puede estar en blanco.");
+		Validation.RequireField("password", "La contraseña no puede estar en blanco.");
+
+		if(Validation.IsValid())
+		{
+			//Intento de login con las credenciales proporcionadas
+			if(WebSecurity.Login(email, password, rememberMe)) {
+				if(Request.QueryString["sender"] != null) {					
+					Response.Redirect(Request.QueryString["sender"]);
+				} 
+				else {					
+					Response.Redirect("~/Default");
+				}
+			} 
+			else {
+				Validation.AddFormError("No ha sido posible iniciar sesion.");
+			}
+		}
+	}
+    
+}
+
+<h1>Iniciar sesion</h1>
+@Html.ValidationSummary(true)
+<form action="Login?@Request.QueryString" method="post" class="accountForm">
+	<p>Por favor, inicie sesion. Si aun no tienes una cuenta
+		<a href="Register?@Request.QueryString">registrate</a>.</p>
+	<p>
+		@Html.Label("Email: ", "email")<br />
+		@Html.TextBox("email", email)
+		@Html.ValidationMessage("email")
+	</p>
+	<p>
+		@Html.Label("Contraseña: ", "password")<br />
+		@Html.Password("password", password)
+		@Html.ValidationMessage("password")
+	</p>
+	<p>
+		@Html.CheckBox("rememberMe", new {value = "true" })
+		@Html.Label("¿Recordarme en este equipo?", "rememberMe")
+	</p>
+	<p>
+		<input type="submit" value="Iniciar Sesion" />
+	</p>
+	<p>
+		<a href="ForgottenPassword">¿Olvidaste la contraseña?</a>
+	</p>
+</form>

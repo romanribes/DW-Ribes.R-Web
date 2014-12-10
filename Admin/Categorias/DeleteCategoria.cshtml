@@ -1,0 +1,39 @@
+﻿@{
+    Layout = "~/Shared/Layouts/_AdminLayout.cshtml";
+	Page.Title = "Eliminar Categoria";  	
+
+	var categoriaId = UrlData[0];
+	if(categoriaId.IsEmpty()) {
+		Response.Redirect("~/Admin/Categorias/");
+	}
+
+	var db = Database.Open("ChistesMalos");
+
+	if(IsPost)
+	{
+		var sqlDelete = "DELETE FROM Categorias WHERE categoriaId = @0";
+		db.Execute(sqlDelete, categoriaId);
+		Response.Redirect("~/Admin/Categorias/");
+	}
+
+	var sqlSelect = "SELECT * FROM Categorias WHERE categoriaId = @0";
+	var categoria = db.QuerySingle(sqlSelect, categoriaId);    
+}
+
+@if(!Admin.CategoriaEstaVacia(categoriaId))
+{
+	<p>No es posible eliminar la categoria @categoria.Nombre mientras tenga productos asociados.</p>
+}
+else
+{
+	<p>Estas seguro de que quieres eliminar la categoria @categoria.Nombre?</p>
+	
+	<form action="" method="post" id="deleteForm">
+		<input type="button" 
+			onclick="window.location = '@Href("~/Admin/Categorias/")';"
+			value="Cancelar" />
+		<input type="submit" value="Eliminar" />			   
+	</form>	
+}
+
+

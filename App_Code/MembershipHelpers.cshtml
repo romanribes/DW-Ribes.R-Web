@@ -1,0 +1,17 @@
+﻿@helper AccountSummary()
+{
+    if(WebSecurity.IsAuthenticated) {
+   		<text>
+			
+			Bienvenido <a href="@Href("~/Account/ChangePassword")">@WebSecurity.CurrentUserName</a> |
+			<a href="@Href("~/Account/Logout")">Cerrar Sesion</a> |
+			<a href="@Href("~/Admin/Default")">Admin</a>
+		</text>
+   } else {
+   		<text>
+			
+			<a href="@Href("~/AñadirChiste")">Añadir Chiste</a> |
+            <a href="@Href("~/Account/Login")">Admin</a> 
+		</text>
+   }
+}

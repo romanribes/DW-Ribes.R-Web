@@ -1,0 +1,100 @@
+﻿@{
+    Layout = "~/Shared/Layouts/_AdminLayout.cshtml";
+	Page.Title = "Chistes";
+	
+	var chisteId = "new";
+	var titulo = "";
+	var autor = "";
+	var chiste = "";
+	
+	var categoria = "";
+	
+	var db = Database.Open("ChistesMalos");
+
+	if(!UrlData[0].IsEmpty())
+	{
+		chisteId = UrlData[0];
+
+		var sqlCommand = "SELECT * FROM chistes WHERE chisteId = @0";
+		var chistedb = db.QuerySingle(sqlCommand, chisteId);
+
+		titulo = chistedb.Titulo;
+		autor = chistedb.autor;
+		chiste = chistedb.chiste;
+		categoria = chistedb.Categoria.ToString();
+	}
+
+	if(IsPost)
+	{
+		chisteId = Request["chisteId"];
+		titulo = Request["titulo"];
+		autor = Request["autor"];
+		chiste = Request["chiste"];
+		categoria = Request["categoria"];
+
+		//Validacion
+		Validation.RequireField("titulo", "El titulo del chiste no puede estar en blanco");
+		Validation.RequireField("autor", "El autor es obligatorio");
+		Validation.RequireField("chiste", "El chiste no puede quedar vacio.");
+
+		if(Validation.IsValid())
+		{
+			var sql = "";
+			if(chisteId == "new")
+			{
+				//Insertar nuevo registro producto
+				sql = @"INSERT INTO chistes (titulo, autor, chiste, categoria)
+						VALUES (@0, @1, @2, @3)";	
+            }
+			else
+			{
+				//Actualizar el registro de producto existente
+				sql = @"UPDATE chistes
+						SET titulo = @0, autor = @1, chiste = @2, categoria = @3
+						WHERE chisteId = @4";
+                        
+			}
+			
+			db.Execute(sql, titulo, autor, chiste, categoria, chisteId);
+
+			if(chisteId =="new") {
+				chisteId = db.GetLastInsertId().ToString();
+			}
+			
+			Response.Redirect("~/Admin/Chistes/"); //Importante la barra final en la URL
+		}
+	}
+
+}
+
+<h1>Detalles del producto</h1>
+
+<div id="productoForm">
+	<form action="" method="post" enctype="multipart/form-data">
+		@Html.Hidden("chisteId", chisteId)
+		<p>
+			@Html.Label("Titulo: ", "titulo")<br />
+			@Html.TextBox("titulo", titulo)
+			@Html.ValidationMessage("titulo")
+		</p>
+		<p>
+			@Html.Label("autor: ", "autor")<br />
+			@Html.TextBox("autor", autor)
+			@Html.ValidationMessage("autor")
+		</p>
+		<p>
+			@Html.Label("chiste: ", "chiste")<br />
+			@Html.TextArea("chiste", chiste, 10, 40, null)
+			@Html.ValidationMessage("chiste")
+		</p>
+		<p>
+			@Html.Label("Categoria: ", "categoria")<br />
+			@Chistes.CategoriasDropDownList("categoria", categoria)
+		</p>
+		<p>
+			@{ var btnSubmitText = chisteId == "new" ? "Insertar" : "Actualizar"; }
+			<input type="submit" value="@(chisteId == "new" ? "Insertar" : "Actualizar")" />
+		</p>
+	</form>
+</div>
+@*<div id="productoFormImagen">@Productos.ShowProductoImagen(productoId)</div>*@

@@ -1,0 +1,70 @@
+﻿@{
+	Layout = "~/Shared/Layouts/_Layout.cshtml";
+	Page.Title = "Registro";
+
+	var email = "";
+	var password1 = "";
+	var password2 = "";
+
+	Validation.RequireField("email","Es necesario proporcionar una direccion de email.");
+	Validation.Add("email", Validator.Regex(@"^([\w\.\-]+)@([\w\-]+)((\.(\w){2,3})+)$", "La direccion de correo no es correcta"));
+
+	Validation.RequireField("password1","Es necesario proporcionar una contraseña.");
+	Validation.Add("password1", Validator.EqualsTo("password2", "Las constraseñas no coinciden."));
+	
+	if(IsPost)
+	{
+		email = Request["email"];
+		password1 = Request["password1"];
+		password2 = Request["password2"];
+
+		if(Validation.IsValid())
+		{
+			WebSecurity.Logout();
+			
+			if(WebSecurity.UserExists(email))
+			{
+				ModelState.AddError("email", "Ya existe una cuenta asociada con este email.");
+			}
+			
+			if(ModelState.IsValid)
+			{
+				WebSecurity.CreateUserAndAccount(email, password1);
+				WebSecurity.Login(email, password1);
+
+				if(Request.QueryString["sender"] != null)
+				{
+					Response.Redirect(Request.QueryString["sender"]);
+				}
+				else
+				{
+					Response.Redirect("~/Default");
+				}
+			}
+		}
+
+	}
+    
+}
+
+<h1>Registrar nueva cuenta de usuario</h1>
+<form action="Register?@Request.QueryString" method="post" class="accountForm">
+	<p>
+		@Html.Label("Email: ", "email")<br />
+		@Html.TextBox("email", email)
+		@Html.ValidationMessage("email")
+	</p>
+	<p>
+		@Html.Label("Contraseña: ", "password1")<br />
+		@Html.Password("password1", password1)
+		@Html.ValidationMessage("password1")
+	</p>
+	<p>
+		@Html.Label("Confirma Contraseña: ", "password2")<br />
+		@Html.Password("password2", password2)
+		@Html.ValidationMessage("password2")
+	</p>
+	<p>
+		<input type="submit" value="Registrar" />
+	</p>
+</form>

@@ -15,6 +15,7 @@
         
     </div>
     <div id="productoDestacadoDetalles">
+        <a href="~/ChisteDetalles/@chiste.chisteID"><h2>@chiste.titulo</h2></a>
         <p>@chiste.chiste</p>
         <p class="precio">@chiste.autor</p>
         <p><a href="~/ChisteDetalles/@chiste.chisteID" class="detailsButton">Mas detalles</a></p>
@@ -22,7 +23,7 @@
 }
 
 @{
-    sqlSelect = @"SELECT TOP 4 chisteID,chiste FROM chistes 
+    sqlSelect = @"SELECT TOP 4 chisteID,titulo FROM chistes 
                   ORDER BY chisteId DESC";
 
     var lastchistes = db.Query(sqlSelect);
@@ -36,11 +37,20 @@
             @foreach(var item in lastchistes)
             {
                 <li>
-                    <a href="~/ChisteDetalles/@item.chisteId" class="detailsButton">@item.chiste
-                       
-                    </a>
+                    <a href="~/ChisteDetalles/@item.chisteId" class="detailsButton">@item.titulo</a>
                 </li>   
             }
         </ul>
     </div>
+@*var db = Database.Open("MitjaMARKT");
+		var pedidoSql = @"INSERT INTO Pedidos (UserId, PedidoEnviado, Total,
+						Fecha, Direccion1, Direccion2, Poblacion, Provincia,
+						CodigoPostal, Pais)
+						VALUES ( @0, @1, @2, @3, @4, @5, @6, @7, @8, @9)";
+
+		db.Execute(pedidoSql, userID, false, cart.TotalValue, DateTime.Now,
+				direccion1, direccion2, poblacion, provincia, codigoPostal, pais);
+
+		var pedidoId = db.GetLastInsertId();
+*@
 }

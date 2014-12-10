@@ -1,0 +1,28 @@
+﻿@* Funciones de Administracion *@
+
+@functions {
+
+	public static bool CategoriaExiste(string categoriaTitulo)
+	{
+		var db = Database.Open("ChistesMalos");
+		var sqlQuery = "SELECT categoriaId FROM Categorias WHERE nombre = @0";
+
+		return db.Query(sqlQuery, categoriaTitulo).Count() > 0;
+	}
+	
+	public static bool CategoriaEstaVacia(string categoriaId)	
+	{
+		var db = Database.Open("ChistesMalos");
+		var sqlQuery = "SELECT chisteId FROM chistes WHERE categoria = @0";
+
+		return db.Query(sqlQuery, categoriaId).Count() == 0;
+	}
+    public static bool ChisteSinComentarios(string chisteId)
+    {
+        var db = Database.Open("ChistesMalos");
+        var sqlQuery = "SELECT comentariId from comentarios where chisteId = @0";
+
+        return db.Query(sqlQuery, chisteId).Count() == 0;    
+    }
+}
+

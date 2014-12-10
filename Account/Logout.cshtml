@@ -1,0 +1,10 @@
+﻿@{
+    Layout = "~/Shared/Layouts/_Layout.cshtml";
+	Page.Title = "Cerrar Sesion";
+
+	WebSecurity.Logout();
+}
+
+<h1>Cerrar sesion</h1>
+<p>Tu sesion en este sitio web ha sido cerrada.</p>
+<p><a href="@Href("~/Default")">Volver a la p&aacute;gina principal</a></p>

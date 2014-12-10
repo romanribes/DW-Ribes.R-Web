@@ -1,0 +1,53 @@
+﻿@{
+    Layout = "~/Shared/Layouts/_AdminLayout.cshtml";
+	Page.Title = "Categorias";  
+	
+	var categoriaTitulo = "";
+	
+	var db = Database.Open("ChistesMalos");
+
+	if(IsPost && !Request["categoriaTitulo"].IsEmpty())
+	{
+		categoriaTitulo = Request["categoriaTitulo"];
+		if(!Admin.CategoriaExiste(categoriaTitulo))
+		{
+			var sqlInsert = "INSERT INTO Categorias(nombre) VALUES (@0)";
+			db.Execute(sqlInsert, categoriaTitulo);
+		}
+		else
+		{
+			ModelState.AddError("categoriaTitulo", "La categoria ya existe.");
+		}
+	}
+
+	var sqlCommand = "SELECT * FROM Categorias";
+	var categorias = db.Query(sqlCommand);
+
+}
+
+<h1>Categorias</h1>
+
+<table class="grid">
+	<tr>
+		<th colspan="3" class="gridHeader">Categoria</th>
+	</tr>
+
+	@foreach(var categoria in categorias)
+	{
+		<tr>
+			<td class="mainColumn">@categoria.Nombre</td>
+			<td><a href="EditCategoria/@categoria.CategoriaId">Editar</a></td>
+			<td><a href="DeleteCategoria/@categoria.CategoriaId">Eliminar</a></td>
+		</tr>
+	}
+</table>
+
+<h2>Añadir nueva categoria</h2>
+<form action="" method="post">
+	<p>
+		Titulo de la categoria:
+		@Html.TextBox("categoriaTitulo", categoriaTitulo)
+		<input type="submit" value="Añadir" />
+		@Html.ValidationMessage("categoriaTitulo")
+	</p>
+</form>

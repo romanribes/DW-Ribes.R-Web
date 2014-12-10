@@ -5,23 +5,23 @@
 
 body {
 	background-color: #efefef;
-	color: #333;
+	color: #323E4E;
 	font-family: Verdana, Helvetica, sans-serif;
 	font-size: .75em;
 }
 
 a:link {
-	color: #b80202;
+	color: #323E4E;
 	text-decoration: none;
 }
 
 a:visited {
-	color: #b80202;
+	color: #323E4E;
 	text-decoration: none;
 }
 
 a:hover {
-	color: #e00000;
+	color: #5093A3;
 	text-decoration: none;
 }
 
@@ -43,11 +43,12 @@ input[type="text"]
 #page {
 	margin: 0 auto;
 	width: 960px;
-	background-color: #fff;
+	background-color: #EFF6FC;
 }
 
 #header {
 	height: 60px;
+    
 }
 
 #content, #footer {
@@ -99,7 +100,7 @@ input[type="text"]
 }
 
 #categorias ul li:hover {
-	background-color: #fee;
+	background-color: #9BB5DA;
 }
 
 /* Lista de productos */
@@ -148,7 +149,7 @@ input[type="text"]
 	margin-bottom: 10px;
 }
 
-#pedidoForm {
+#pedidoForm{
 	float: left;
 }
 
@@ -176,6 +177,19 @@ input[type="text"]
 	margin-top: 20px;
 	padding: 5px;
 	width: 100%;
+}
+/*Comentarios*/
+#comentariosForm {
+   float: left; 
+}
+#comentariosForm fieldset {
+    width: 675px;
+    margin-top: 20px;
+    padding: 10px; 
+}
+#comentariosForm label {
+    font-weight: bold;
+    padding: 0px 10px 0px 10px;
 }
 
 /* Pagelet Form de busqueda */
@@ -335,7 +349,7 @@ input.input-validation-error {
 #productoDestacadoDetalles .precio {
     font-size: 1em;
     font-style: italic;
-    color: #999;
+    color: red;
     margin: 10px 0px 10px 0px;
 }
 

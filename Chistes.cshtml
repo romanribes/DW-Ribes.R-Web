@@ -11,11 +11,11 @@
 	Page.Title = nombreCategoria;
 
 	var db = Database.Open("ChistesMalos");
-	var sqlSelect = "SELECT chisteID,chiste,autor,categorias.nombre FROM chistes " +
+	var sqlSelect = "SELECT chisteID,chiste,autor,titulo,categorias.nombre FROM chistes " +
 					"LEFT OUTER JOIN Categorias ON chistes.categoria = Categorias.categoriaID " +
 					"WHERE Categorias.nombre = @0";
 
-	var encuestas = db.Query(sqlSelect, nombreCategoria);
+	var chistes = db.Query(sqlSelect, nombreCategoria);
     @*
     var db = Database.Open("TeleEncuestas");
 	var sqlCommand = @"SELECT Encuestas.EncuestasId, Encuestas.Titulo, Categorias.Nombre, Encuestas.autor
@@ -25,7 +25,7 @@
 	
 	var encuestas = db.Query(sqlCommand, nombreCategoria);
     *@
-    var productosGrid = new WebGrid(source: encuestas,
+    var chistesGrid = new WebGrid(source: chistes,
                                     rowsPerPage: 10);	
 }
 
@@ -33,7 +33,7 @@
 	<h1>@nombreCategoria</h1>
 </div>
 
-@if(encuestas.Count() == 0)
+@if(chistes.Count() == 0)
 {
 	<p>
 		No se han encontrado chistes en esta categoria.
@@ -43,19 +43,19 @@
 else
 {
     <div class="grid">
-    @productosGrid.GetHtml(
+    @chistesGrid.GetHtml(
         tableStyle: "grid",
         headerStyle: "gridHeader",
         alternatingRowStyle: "gridAlt",
         footerStyle: "gridFooter",
-        columns: productosGrid.Columns(
-                productosGrid.Column(
+        columns: chistesGrid.Columns(
+                chistesGrid.Column(
                     columnName: "chisteId",
                     header: "ID"
                     ),
-                productosGrid.Column("chiste", "chiste"),
-                productosGrid.Column("autor","Autor"),
-                productosGrid.Column(null, null,
+                chistesGrid.Column("Titulo", "Titulo Producto"),
+                chistesGrid.Column("autor","Autor"),
+                chistesGrid.Column(null, null,
                     format: @<text>
                                 <a href="~/chisteDetalles/@item.chisteId">Detalles</a>
                             </text>)                

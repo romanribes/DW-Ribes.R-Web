@@ -33,11 +33,11 @@
     
 }
 
-<h1>Iniciar sesion</h1>
+<h1>Administrador</h1>
 @Html.ValidationSummary(true)
 <form action="Login?@Request.QueryString" method="post" class="accountForm">
-	<p>Por favor, inicie sesion. Si aun no tienes una cuenta
-		<a href="Register?@Request.QueryString">registrate</a>.</p>
+	<p>Por favor, inicie sesion
+		</p>
 	<p>
 		@Html.Label("Email: ", "email")<br />
 		@Html.TextBox("email", email)

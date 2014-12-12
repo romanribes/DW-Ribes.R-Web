@@ -433,6 +433,7 @@ textarea {
 
 .gridAlt {
 	background-color: #f7f7f7;
+    width: 600px; overflow: hidden;
 }
 .gridFooter {
 	border-top: 1px solid #cdcdcd;

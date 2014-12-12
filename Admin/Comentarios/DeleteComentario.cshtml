@@ -1,0 +1,19 @@
+﻿@{
+    Layout = "~/Shared/Layouts/_AdminLayout.cshtml";
+	Page.Title = "Eliminar Comentario";  	
+
+	var comentariID = UrlData[0];
+	if(comentariID.IsEmpty()) {
+		Response.Redirect("~/Admin/Comentarios/");
+	}
+
+	var db = Database.Open("ChistesMalos");
+		var sqlDelete = "DELETE FROM Comentarios WHERE comentariId = @0";
+		db.Execute(sqlDelete, comentariID);
+		Response.Redirect("~/Admin/Comentarios/");
+	
+}
+
+
+
+

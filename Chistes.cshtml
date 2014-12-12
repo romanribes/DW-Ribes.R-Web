@@ -16,15 +16,7 @@
 					"WHERE Categorias.nombre = @0";
 
 	var chistes = db.Query(sqlSelect, nombreCategoria);
-    @*
-    var db = Database.Open("TeleEncuestas");
-	var sqlCommand = @"SELECT Encuestas.EncuestasId, Encuestas.Titulo, Categorias.Nombre, Encuestas.autor
-					   FROM Encuestas INNER JOIN Categorias
-					   ON Encuestas.Categoria = Categorias.CategoriaId
-					   ORDER BY Titulo";
-	
-	var encuestas = db.Query(sqlCommand, nombreCategoria);
-    *@
+  
     var chistesGrid = new WebGrid(source: chistes,
                                     rowsPerPage: 10);	
 }

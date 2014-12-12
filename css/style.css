@@ -129,7 +129,7 @@ input[type="text"]
 	padding: 0px;
 }
 
-#productosList .precio {
+#productosList .autor {
 	font-size: 1.25em;
 	font-style: italic;
 	color: #633;
@@ -139,10 +139,10 @@ input[type="text"]
 
 #productoDetails {
 	float: left;
-	width: 450px;
+	width: 440px;
 }
 
-#productoDetails .precio {
+#productoDetails .autor {
 	font-size: 1.25em;
 	font-style: italic;
 	color: #633;
@@ -156,6 +156,7 @@ input[type="text"]
 #pedidoForm fieldset {
 	width: 230px;
 	margin: 0px;
+    margin-left: 10px;
 	padding: 10px;
 }
 
@@ -238,7 +239,7 @@ input[type="text"]
 	width: 10%;
 }
 
-#cartTable .precio {
+#cartTable .autor {
 	text-align: right;
 	width: 20%;
 }
@@ -332,21 +333,21 @@ input.input-validation-error {
 
 /* Pagina de inicio */
 
-#productoDestacadoImagen {
+#chistedestacadodelmes {
     float: left;
-    width: 380px;
+    width: 500px;
 }
 
-#productoDestacadoDetalles {
+#chistedestacadodetalles {
     float: left;
-    width: 250px;
+    width: 400px;
 }
 
 #productoDestacadoDetalles h3 {
     margin-bottom: 20px;
 }
 
-#productoDestacadoDetalles .precio {
+#productoDestacadoDetalles .autor {
     font-size: 1em;
     font-style: italic;
     color: red;
@@ -380,6 +381,46 @@ border: none;
 }
 
 .grid td {
+	padding: 5px;
+}
+
+.gridHeader {
+	background-color: #fff;
+	font-weight: bold;
+	text-align: left;
+	border-bottom: 1px solid #cdcdcd;
+}
+
+.gridAlt {
+	background-color: #f7f7f7;
+}
+.gridFooter {
+	border-top: 1px solid #cdcdcd;
+}
+.grid tr .mainColumn {
+	width: 100%;
+}
+
+.grid .rightTextColumn
+{
+	text-align: right;
+}
+
+.grid .centerTextColumn
+{
+	text-align: center;
+}
+textarea {
+    resize: none;
+}
+/*Comentarios*/
+.gridcomentario {
+	margin-top: 20px;
+	border-collapse: collapse;
+	width: 100%;
+}
+
+.gridcomentario td {
 	padding: 5px;
 }
 

@@ -1,0 +1,18 @@
+﻿@{
+    Layout = "~/Shared/Layouts/_Layout.cshtml";
+	
+	var message = UrlData[0] == "404" ? "Archivo no encontrado" : "ERROR!";
+	Page.Title = message;	
+}
+
+<h1>@message</h1>
+<p>
+	Desafortunadamente se ha producido un error que
+	ha impedido procesar la solicitud.
+</p>
+<p>
+	<br />
+	Por favor, intente seleccionar una de las categorias 
+	de la lista de la izquierda para ver nuestro rango
+	completo de productos.
+</p>

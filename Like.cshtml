@@ -1,0 +1,27 @@
+﻿@{
+    var chisteId = UrlData[0];
+	if(chisteId.IsEmpty()) {
+		Response.Redirect("~/");
+	}
+
+	var db = Database.Open("ChistesMalos");
+
+	
+		var sqlUpdate = "UPDATE Chistes SET megusta=megusta+1 WHERE chisteID= @0";
+		db.Execute(sqlUpdate, chisteId);
+		Response.Redirect("~/ChisteDetalles/"+@chisteId);
+	
+
+}
+
+<!DOCTYPE html>
+
+<html lang="en">
+    <head>
+        <meta charset="utf-8" />
+        <title></title>
+    </head>
+    <body>
+        
+    </body>
+</html>

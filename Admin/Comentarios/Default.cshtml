@@ -1,65 +1,39 @@
 ﻿@{
-	Layout = "~/Shared/Layouts/_AdminLayout.cshtml";
-	Page.Title = "Pedidos"; 
-
-	var showPedidosEnviados = false;
-
-	if(IsPost) {
-		showPedidosEnviados = Request["showPedidosEnviados"].AsBool();
-	}
-
-	var db = Database.Open("ChistesMalos");
-	var sqlCommand = @"SELECT Chistes.chisteId, Pedidos.PedidoEnviado, Pedidos.Total, 
-					   Pedidos.Fecha, UserProfile.Email
-					   FROM Pedidos INNER JOIN UserProfile 
-					   ON Pedidos.UserId = UserProfile.UserId
-					   WHERE PedidoEnviado = @0
-					   ORDER BY Fecha DESC";
-
-	var result = db.Query(sqlCommand, showPedidosEnviados);
-
-	var pedidosGrid = new WebGrid( source: result, 
-									rowsPerPage: 20);
+    Layout = "~/Shared/Layouts/_AdminLayout.cshtml";
+	Page.Title = "Comentarios"; 
+	
+    var db = Database.Open("ChistesMalos");
     
+	var sqlCommand = @"SELECT chistes.chisteID, chistes.Titulo, comentarios.comentari, comentarios.comentariID
+					   FROM chistes INNER JOIN comentarios
+					   ON chistes.chisteID = comentarios.ChisteID
+					   ORDER BY chistes.chisteID";
+	
+	var result = db.Query(sqlCommand);
+
+    var ComentariosGrid = new WebGrid(source: result,
+                                    rowsPerPage: 10);				      
 }
 
-<h1>Resumen de pedidos</h1>
-<form action="Default" method="post">
-	<p>
-		Pedidos no enviados @Html.RadioButton("showPedidosEnviados", "false", !showPedidosEnviados)
-		Pedidos enviados @Html.RadioButton("showPedidosEnviados", "true", showPedidosEnviados)
-		<input type="submit" value="Ver" />
-	</p>
-	<div class="grid">
-		@pedidosGrid.GetHtml(
-				tableStyle: "grid",
-				headerStyle: "gridHeader", 
-				alternatingRowStyle: "gridAlt",
-				footerStyle: "gridFooter",
-
-				columns: pedidosGrid.Columns(
-								pedidosGrid.Column("PedidoId", "ID Pedido"),
-								pedidosGrid.Column("Email", "Usuario",
-												format: @<text>
-															<a href="mailto:@item.Email">
-																@item.Email
-															</a>
-														</text>),
-								pedidosGrid.Column("PedidoEnviado", "Enviado", style: "centerTextColumn",
-												format:@<text>
-															@(item.PedidoEnviado ? "Si":"No")
-														</text>),
-								pedidosGrid.Column("Total", "Valor Total", style: "rightTextColumn",
-												format:@<text>@item.Total.ToString("N2") €</text>),
-								pedidosGrid.Column("Fecha", "Fecha Pedido"),
-								pedidosGrid.Column(format:
-														@<text>
-															<a href="DetallesPedido/@item.PedidoId">
-																Detalles
-															</a>
-														</text>)
-							)
-			)
-	</div>
-</form>
-
+<h1>Listado Comentarios</h1>
+<div class="grid">
+    @ComentariosGrid.GetHtml(
+        tableStyle: "grid",
+        headerStyle: "gridHeader",
+        alternatingRowStyle: "gridAlt",
+        footerStyle: "gridFooter",
+        columns: ComentariosGrid.Columns(
+                ComentariosGrid.Column(
+                    columnName: "chisteId",
+                    header: "ID_Chiste"
+                    ),
+                ComentariosGrid.Column("comentariID", "Id_Coment"),
+                ComentariosGrid.Column("comentari", "comentari"),
+                ComentariosGrid.Column(null, null,
+                    format: @<text>
+                                <a href="DeleteComentario/@item.comentariId">Eliminar</a>
+                            </text>)                
+        ) 
+        
+    )
+</div>

@@ -1,5 +1,5 @@
 ﻿@{
-    Layout = "~/Shared/Layouts/_AdminLayout.cshtml";
+    Layout = "~/Shared/Layouts/_Layout.cshtml";
 	Page.Title = "Chistes";
 	
 	var chisteId = "new";
@@ -40,20 +40,11 @@
 		if(Validation.IsValid())
 		{
 			var sql = "";
-			if(chisteId == "new")
-			{
-				//Insertar nuevo registro producto
+			
+				//Insertar nuevo chiste producto
 				sql = @"INSERT INTO chistes (titulo, autor, chiste, categoria)
 						VALUES (@0, @1, @2, @3)";	
-            }
-			else
-			{
-				//Actualizar el registro de producto existente
-				sql = @"UPDATE chistes
-						SET titulo = @0, autor = @1, chiste = @2, categoria = @3
-						WHERE chisteId = @4";
-                        
-			}
+         
 			
 			db.Execute(sql, titulo, autor, chiste, categoria, chisteId);
 
@@ -61,7 +52,7 @@
 				chisteId = db.GetLastInsertId().ToString();
 			}
 			
-			Response.Redirect("~/Admin/Chistes/"); //Importante la barra final en la URL
+			Response.Redirect("~/ChisteDetalles/"+@chisteId); //Importante la barra final en la URL
 		}
 	}
 
@@ -74,8 +65,9 @@
 		@Html.Hidden("chisteId", chisteId)
 		<p>
 			@Html.Label("Titulo: ", "titulo")<br />
-			@Html.TextBox("titulo", titulo)
+			@Html.TextBox("titulo", titulo ,new { style="width:600px" })
 			@Html.ValidationMessage("titulo")
+            
 		</p>
 		<p>
 			@Html.Label("autor: ", "autor")<br />
@@ -84,7 +76,7 @@
 		</p>
 		<p>
 			@Html.Label("chiste: ", "chiste")<br />
-			@Html.TextArea("chiste", chiste, 10, 40, null)
+			@Html.TextArea("chiste", chiste, 5, 90, null)
 			@Html.ValidationMessage("chiste")
 		</p>
 		<p>
@@ -92,7 +84,7 @@
 			@Chistes.CategoriasDropDownList("categoria", categoria)
 		</p>
 		<p>
-			
+			<br/>
 			<input type="submit" value="Insertar" />
 		</p>
 	</form>

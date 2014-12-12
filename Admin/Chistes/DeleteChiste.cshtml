@@ -22,8 +22,9 @@
 
 @if(!Admin.ChisteSinComentarios(chisteId))
 {
-	<p>No es posible eliminar el "@chiste.titulo" mientras tenga comentarios asociados.</p>
-    <a href="../Comentarios/@item.chisteId">Eliminar comentarios</a>
+	<p>No es posible eliminar el chiste <b>"@chiste.titulo"</b> mientras tenga comentarios asociados. Eliminar todos 
+    los comentarios de este chiste para poder eliminar el chiste</p><br/>
+    <a href="../../Comentarios">Eliminar comentarios</a>
 }
 else
 {

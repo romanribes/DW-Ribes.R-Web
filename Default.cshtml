@@ -3,7 +3,7 @@
 	Page.Title = "Página Principal";
 
     var db = Database.Open("ChistesMalos");
-    var sqlSelect = @"SELECT * FROM chistes INNER JOIN Settings ON chistes.chisteId = Settings.chistesDestacado";
+    var sqlSelect = @"SELECT top 1 * FROM chistes ORDER BY megusta desc";
 
     var chiste = db.QuerySingle(sqlSelect);    
 }
@@ -11,19 +11,29 @@
 @if(chiste != null)
 {
     <h1 class="">Chiste del mes</h1>
-    <div id="productoDestacadoImagen">
+    <div id="chistedestacadodelmes">
         
     </div>
-    <div id="productoDestacadoDetalles">
+    <div id="chistedestacadodetalles">
         <a href="~/ChisteDetalles/@chiste.chisteID"><h2>@chiste.titulo</h2></a>
-        <p>@chiste.chiste</p>
-        <p class="precio">@chiste.autor</p>
+        <p align="justify">@chiste.chiste</p>
+        <p class="autor">@chiste.autor</p><br/>
         <p><a href="~/ChisteDetalles/@chiste.chisteID" class="detailsButton">Mas detalles</a></p>
     </div> 
+    <div id="pedidoForm">
+			<fieldset>
+				<legend>Compartir</legend>
+                <p>@chiste.megusta me gustas</p>
+                <a href="../like.cshtml/@chiste.chisteID">Dar me gusta</a>
+                <p>
+					@GooglePlusOne.PlusOneButton(language: GooglePlusOne.Languages.Spanish)
+				</p>
+			</fieldset>
+		</div>
 }
 
 @{
-    sqlSelect = @"SELECT TOP 4 chisteID,titulo FROM chistes 
+    sqlSelect = @"SELECT TOP 8 chisteID,titulo FROM chistes 
                   ORDER BY chisteId DESC";
 
     var lastchistes = db.Query(sqlSelect);
@@ -42,15 +52,4 @@
             }
         </ul>
     </div>
-@*var db = Database.Open("MitjaMARKT");
-		var pedidoSql = @"INSERT INTO Pedidos (UserId, PedidoEnviado, Total,
-						Fecha, Direccion1, Direccion2, Poblacion, Provincia,
-						CodigoPostal, Pais)
-						VALUES ( @0, @1, @2, @3, @4, @5, @6, @7, @8, @9)";
-
-		db.Execute(pedidoSql, userID, false, cart.TotalValue, DateTime.Now,
-				direccion1, direccion2, poblacion, provincia, codigoPostal, pais);
-
-		var pedidoId = db.GetLastInsertId();
-*@
 }
